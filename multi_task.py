@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import json
 import os
 
-ruta_archivos = "/opt/airflow/dags/json"
+ruta_archivos = "/opt/airflow/dags/repo/json"
 archivos_json = os.listdir(ruta_archivos)
 
 for archivo in archivos_json:
