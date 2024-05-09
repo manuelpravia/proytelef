@@ -1,5 +1,5 @@
 # Abre un archivo de texto en modo escritura ('w')
-archivo_texto = "/opt/airflow/dags/repo/scripts/archivo.txt"
+archivo_texto = "/opt/airflow/data/archivo.txt"
 
 with open(archivo_texto, 'w') as archivo:
     # Escribe una cadena en el archivo
