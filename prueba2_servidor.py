@@ -10,6 +10,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
+    'retry_delay': timedelta(minutes=1),
 }
 
 dag = DAG(
@@ -28,7 +29,6 @@ t1 = SSHOperator(
     ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py',  # Ruta al script de Python en el servidor remoto
     timeout=20,
-    poke_interval=4,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
