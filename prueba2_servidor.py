@@ -22,7 +22,7 @@ dag = DAG(
 )
 
 def print_numbers():
-    for i in range(1, 21):
+    for i in range(1, 11):
         time.sleep(3)
         print(i)
 
@@ -30,7 +30,7 @@ t1 = SSHOperator(
     task_id='ssh_task',
     ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py',  # Ruta al script de Python en el servidor remoto
-    conn_timeout=60,
+    cmd_timeout=60,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
