@@ -23,6 +23,7 @@ dag = DAG(
 task = SSHOperator(
     task_id='execute_script',
     ssh_conn_id='my_ssh_conn',
+    cmd_timeout=60,
     command='python3 /root/generar_data.py',  # Ruta al script en el servidor externo
     dag=dag,
 )
