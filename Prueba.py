@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -42,7 +43,7 @@ dag = DAG(
 def tarea0_func(**kwargs):
     conf = kwargs['dag_run'].conf
     print("ejecutando tarae0: inicio de ejecucion")
-
+    time.sleep(5)
     if "commit" in conf and conf["commit"]=="1":
        raise AirflowFailException("Permisos insuficientes para ejecutar el commit 1")
 
@@ -52,16 +53,20 @@ def tarea0_func(**kwargs):
 def tarea2_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea0')
     print("ejecutando tarae2: inicio de ejecucion")
+    time.sleep(5)
     print( "Hola" )
     print( xcom_value )
+    time.sleep(5)
     print("ejecucion de tarea2: fin de la ejecucion")
     return { "ok": 2 }
 
 def tarea3_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
     print("ejecutando tarae3: inicio de ejecucion")
+    time.sleep(5)
     print( "Hola" )
     print( xcom_value )
+    time.sleep(5)
     print("ejecucion de tarea3: fin de la ejecucion")
     return { "ok": 3 }
 
