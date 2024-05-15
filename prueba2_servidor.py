@@ -1,3 +1,4 @@
+import time
 from airflow import DAG
 from airflow.contrib.operators.ssh_operator import SSHOperator
 from airflow.operators.python import PythonOperator
@@ -22,6 +23,7 @@ dag = DAG(
 
 def print_numbers():
     for i in range(1, 21):
+        time.sleep(3)
         print(i)
 
 t1 = SSHOperator(
