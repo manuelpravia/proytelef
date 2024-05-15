@@ -94,4 +94,5 @@ tarea3 = PythonOperator(
     dag=dag
 )
 
-tarea0 >> [ tarea1, tarea2 ] >> tarea3
+#tarea0 >> [ tarea1, tarea2 ] >> tarea3
+tarea0 >> tarea2 >> tarea3
