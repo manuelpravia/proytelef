@@ -15,7 +15,7 @@ default_args = {
 }
 
 dag = DAG(
-    'ejecucion_servidor1',
+    'proceso_carga_excel',
     default_args=default_args,
     description='A simple DAG to execute a Python script remotely and monitor the log in real time',
     schedule_interval='@once',
