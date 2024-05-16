@@ -26,12 +26,19 @@ def print_numbers():
         time.sleep(3)
         print(i)
 
+def print_ssh_output(**kwargs):
+    ti = kwargs['ti']
+    ssh_output = ti.xcom_pull(task_ids='ssh_task')
+    for line in ssh_output.splitlines():
+        print(line)
+
 t1 = SSHOperator(
     task_id='ssh_task',
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
     cmd_timeout=60,
+    capture_output=True,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
@@ -42,6 +49,12 @@ t2 = PythonOperator(
     dag=dag,
 )
 
+t3 = PythonOperator(
+    task_id='print_ssh_output_task',
+    python_callable=print_ssh_output,
+    provide_context=True,
+    dag=dag,
+)
 
 
 t1 >> t2
