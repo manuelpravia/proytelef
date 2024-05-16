@@ -15,7 +15,7 @@ default_args = {
 }
 
 dag = DAG(
-    'ejecucion_servidor1',
+    'ejecucion_servidor2',
     default_args=default_args,
     description='A simple DAG to execute a Python script remotely and monitor the log in real time',
     schedule_interval='@once',
@@ -28,7 +28,7 @@ def print_numbers():
 
 t1 = SSHOperator(
     task_id='ssh_task',
-    ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
+    ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
     cmd_timeout=60,
