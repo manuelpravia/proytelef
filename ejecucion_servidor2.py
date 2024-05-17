@@ -37,7 +37,7 @@ t1 = SSHOperator(
 )
 
 t2 = PythonOperator(
-    task_id='print_numbers_task',
+    task_id='Limpieza_de_Data',
     python_callable=print_numbers,
     dag=dag,
 )
@@ -55,6 +55,16 @@ t3 = SSHOperator(
 t4 = SSHOperator(
     task_id='registrando_servidor3',
     ssh_conn_id='my_ssh_conn_serv3',  # Nombre de tu conexión SSH configurada en Airflow
+    command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
+    #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
+    cmd_timeout=120,
+    do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
+    dag=dag,
+)
+
+t1 = SSHOperator(
+    task_id='Enviando_correo_servidor2',
+    ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
     cmd_timeout=120,

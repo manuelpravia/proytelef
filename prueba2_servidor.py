@@ -27,7 +27,7 @@ def print_numbers():
         print(i)
 
 t1 = SSHOperator(
-    task_id='ssh_servidor1',
+    task_id='Extrayendo_data_servidor1',
     ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/cargar-oracle.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
@@ -37,7 +37,7 @@ t1 = SSHOperator(
 )
 
 t2 = SSHOperator(
-    task_id='ssh_servidor3',
+    task_id='procesando_data_servidor3',
     ssh_conn_id='my_ssh_conn_serv3',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
@@ -47,7 +47,7 @@ t2 = SSHOperator(
 )
 
 t3 = SSHOperator(
-    task_id='ssh_servidor2',
+    task_id='cargando_a_BD_servidor2',
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
@@ -57,11 +57,21 @@ t3 = SSHOperator(
 )
 
 t4 = PythonOperator(
-    task_id='imprimiendo_numeros',
+    task_id='Ejecutando_validaciones',
     python_callable=print_numbers,
+    dag=dag,
+)
+
+t5 = SSHOperator(
+    task_id='enviando_correo_servidor1',
+    ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
+    command='python3 /root/cargar-oracle.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
+    #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
+    cmd_timeout=120,
+    do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
 
 
 
-t1 >> t2 >> t3 >> t4
+t1 >> t2 >> t3 >> t4 >> t5
