@@ -62,7 +62,7 @@ t4 = SSHOperator(
     dag=dag,
 )
 
-t1 = SSHOperator(
+t5 = SSHOperator(
     task_id='Enviando_correo_servidor2',
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
@@ -73,4 +73,4 @@ t1 = SSHOperator(
 )
 
 
-t1 >> t2 >> t3 >> t4
+t1 >> t2 >> t3 >> t4 >> t5
