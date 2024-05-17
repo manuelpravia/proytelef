@@ -15,7 +15,7 @@ default_args = {
 }
 
 dag = DAG(
-    'ejecucion_servidor2',
+    'registrando-ventas',
     default_args=default_args,
     description='A simple DAG to execute a Python script remotely and monitor the log in real time',
     schedule_interval='@once',
@@ -26,18 +26,12 @@ def print_numbers():
         time.sleep(3)
         print(i)
 
-def print_ssh_output(**kwargs):
-    ti = kwargs['ti']
-    ssh_output = ti.xcom_pull(task_ids='ssh_task')
-    for line in ssh_output.splitlines():
-        print(line)
-
 t1 = SSHOperator(
-    task_id='ssh_task',
+    task_id='registrando_servidor2',
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
-    cmd_timeout=60,
+    cmd_timeout=120,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
@@ -48,12 +42,25 @@ t2 = PythonOperator(
     dag=dag,
 )
 
-t3 = PythonOperator(
-    task_id='print_ssh_output_task',
-    python_callable=print_ssh_output,
-    provide_context=True,
+t3 = SSHOperator(
+    task_id='registrando_servidor1',
+    ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
+    command='python3 /root/cargar-oracle.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
+    #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
+    cmd_timeout=120,
+    do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
+    dag=dag,
+)
+
+t4 = SSHOperator(
+    task_id='registrando_servidor3',
+    ssh_conn_id='my_ssh_conn_serv3',  # Nombre de tu conexión SSH configurada en Airflow
+    command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
+    #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
+    cmd_timeout=120,
+    do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
 
 
-t1 >> t2
+t1 >> t2 >> t3 >> t4

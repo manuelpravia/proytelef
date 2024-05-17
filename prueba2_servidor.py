@@ -31,7 +31,7 @@ t1 = SSHOperator(
     ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/cargar-oracle.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
-    cmd_timeout=60,
+    cmd_timeout=120,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
@@ -41,7 +41,7 @@ t2 = SSHOperator(
     ssh_conn_id='my_ssh_conn_serv3',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
-    cmd_timeout=60,
+    cmd_timeout=120,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
@@ -51,7 +51,7 @@ t3 = SSHOperator(
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
     #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
-    cmd_timeout=60,
+    cmd_timeout=120,
     do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
     dag=dag,
 )
