@@ -72,7 +72,7 @@ t5 = SSHOperator(
     dag=dag,
 )
 
-t0 = SSHOperator(
+tprevia = SSHOperator(
     task_id='Iniciando_servidor2',
     ssh_conn_id='my_ssh_conn_serv2',  # Nombre de tu conexión SSH configurada en Airflow
     command='python3 /root/generar_data.py prametro_1 parametro_2',  # Ruta al script de Python en el servidor remoto
@@ -82,4 +82,4 @@ t0 = SSHOperator(
     dag=dag,
 )
 
-t0 >> t1 >> t2 >> t3 >> t4 >> t5
+tprevia >> t1 >> t2 >> t3 >> t4 >> t5
