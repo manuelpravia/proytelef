@@ -14,17 +14,17 @@ default_args = {
 }
 
 dag = DAG(
-    'execute_script_on_external_server',
+    'execute_sev_ewaya',
     default_args=default_args,
     description='Execute a Python script on an external server via SSH',
     schedule_interval=None,
 )
 
 task = SSHOperator(
-    task_id='execute_script',
-    ssh_conn_id='my_ssh_conn',
+    task_id='ejecuta_EWAYA',
+    ssh_conn_id='conn_telefonica',
     cmd_timeout=60,
-    command='python3 /root/generar_data.py',  # Ruta al script en el servidor externo
+    command='python3 /datos/FG_DATOS/Shells/mensajes.py',  # Ruta al script en el servidor externo
     dag=dag,
 )
 
