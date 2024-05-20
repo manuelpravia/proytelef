@@ -28,7 +28,7 @@ def print_numbers():
 
 
 
-with DAG(dag_id='std_simple_sample', schedule_interval=None, 
+with DAG(dag_id='Delimiar_recursos', schedule_interval=None, 
          tags=['analytics'], default_args=default_args) as dag:
     
     task = PythonOperator(
