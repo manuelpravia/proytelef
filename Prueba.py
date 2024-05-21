@@ -154,7 +154,7 @@ tarea7 = PythonOperator(
     dag=dag
 )
 
-tarea1 >> [ tarea2, tarea2 ]
+tarea1 >> [ tarea2, tarea3 ]
 tarea2 >> tarea4
 tarea3 >> [tarea5, tarea6]
 [tarea4, tarea5, tarea6] >> tarea7
