@@ -70,11 +70,47 @@ def tarea3_func(**kwargs):
     print("ejecucion de tarea3: fin de la ejecucion")
     return { "ok": 3 }
 
-tarea0 = PythonOperator(
-    task_id='tarea0',
-    python_callable=tarea0_func,
-    dag=dag
-)
+def tarea4_func(**kwargs):
+    xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
+    print("ejecutando tarae3: inicio de ejecucion")
+    time.sleep(10)
+    print( "Hola tarea 4" )
+    print( xcom_value )
+    time.sleep(10)
+    print("ejecucion de tarea4: fin de la ejecucion")
+    return { "ok": 3 }
+
+def tarea5_func(**kwargs):
+    xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
+    print("ejecutando tarae5: inicio de ejecucion")
+    time.sleep(10)
+    print( "Hola" )
+    print( xcom_value )
+    time.sleep(10)
+    print("ejecucion de tarea5: fin de la ejecucion")
+    return { "ok": 5 }
+
+def tarea6_func(**kwargs):
+    xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
+    print("ejecutando tarea6: inicio de ejecucion")
+    time.sleep(10)
+    print( "Hola" )
+    print( xcom_value )
+    time.sleep(10)
+    print("ejecucion de tarea6: fin de la ejecucion")
+    return { "ok": 3 }
+
+
+def tarea7_func(**kwargs):
+    xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
+    print("ejecutando tarae7: inicio de ejecucion")
+    time.sleep(5)
+    print( "Hola" )
+    print( xcom_value )
+    time.sleep(5)
+    print("ejecucion de tarea3: fin de la ejecucion")
+    return { "ok": 7 }
+
 
 tarea1 = BashOperator(
     task_id="print_date",
@@ -94,5 +130,33 @@ tarea3 = PythonOperator(
     dag=dag
 )
 
-#tarea0 >> [ tarea1, tarea2 ] >> tarea3
-tarea0 >> tarea2 >> tarea3
+tarea4 = PythonOperator(
+    task_id='tarea4',
+    python_callable=tarea4_func,
+    dag=dag
+)
+
+tarea5 = PythonOperator(
+    task_id='tarea5',
+    python_callable=tarea5_func,
+    dag=dag
+)
+
+tarea6 = PythonOperator(
+    task_id='tarea6',
+    python_callable=tarea6_func,
+    dag=dag
+)
+
+tarea7 = PythonOperator(
+    task_id='tarea7',
+    python_callable=tarea7_func,
+    dag=dag
+)
+
+tarea1 >> [ tarea2, tarea2 ]
+tarea2 >> tarea4
+tarea3 >> [tarea5, tarea6]
+[tarea4, tarea5, tarea6] >> tarea7
+
+#tarea0 >> tarea2 >> tarea3

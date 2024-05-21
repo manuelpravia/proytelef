@@ -41,3 +41,10 @@ with DAG(dag_id='Delimiar_recursos', schedule_interval=None,
     )
 
     task
+
+
+
+
+
+
+# https://towardsdatascience.com/why-we-must-choose-kubernetes-executor-for-airflow-28176062a91b    
