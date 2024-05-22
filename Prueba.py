@@ -5,7 +5,7 @@ from airflow import DAG
 from airflow.exceptions import AirflowFailException
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
-
+from airflow.contrib.operators.ssh_operator import SSHOperator
 
 
 dag_args = {
@@ -43,7 +43,7 @@ dag = DAG(
 def tarea0_func(**kwargs):
     conf = kwargs['dag_run'].conf
     print("ejecutando tarae0: inicio de ejecucion")
-    time.sleep(10)
+    time.sleep(5)
     if "commit" in conf and conf["commit"]=="1":
        raise AirflowFailException("Permisos insuficientes para ejecutar el commit 1")
 
@@ -56,14 +56,14 @@ def tarea2_func(**kwargs):
     time.sleep(10)
     print( "Hola" )
     print( xcom_value )
-    time.sleep(10)
+    time.sleep(5)
     print("ejecucion de tarea2: fin de la ejecucion")
     return { "ok": 2 }
 
 def tarea3_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
     print("ejecutando tarae3: inicio de ejecucion")
-    time.sleep(10)
+    time.sleep(5)
     print( "Hola" )
     print( xcom_value )
     time.sleep(10)
@@ -73,7 +73,7 @@ def tarea3_func(**kwargs):
 def tarea4_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
     print("ejecutando tarae3: inicio de ejecucion")
-    time.sleep(10)
+    time.sleep(5)
     print( "Hola tarea 4" )
     print( xcom_value )
     time.sleep(10)
@@ -83,7 +83,7 @@ def tarea4_func(**kwargs):
 def tarea5_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
     print("ejecutando tarae5: inicio de ejecucion")
-    time.sleep(10)
+    time.sleep(5)
     print( "Hola" )
     print( xcom_value )
     time.sleep(10)
@@ -93,7 +93,7 @@ def tarea5_func(**kwargs):
 def tarea6_func(**kwargs):
     xcom_value = kwargs['ti'].xcom_pull(task_ids='tarea2')
     print("ejecutando tarea6: inicio de ejecucion")
-    time.sleep(10)
+    time.sleep(5)
     print( "Hola" )
     print( xcom_value )
     time.sleep(10)
@@ -111,12 +111,6 @@ def tarea7_func(**kwargs):
     print("ejecucion de tarea3: fin de la ejecucion")
     return { "ok": 7 }
 
-
-tarea1 = BashOperator(
-    task_id="print_date",
-    bash_command='echo "La fecha es $(date)"',
-    dag=dag
-)
 
 tarea2 = PythonOperator(
     task_id='tarea2',
@@ -152,6 +146,16 @@ tarea7 = PythonOperator(
     task_id='tarea7',
     python_callable=tarea7_func,
     dag=dag
+)
+
+tarea1 = SSHOperator(
+    task_id='Trasmitiendo_registros_servidor1',
+    ssh_conn_id='my_ssh_conn',  # Nombre de tu conexión SSH configurada en Airflow
+    command='python3 /root/ejecutar_servido2.py',  # Ruta al script de Python en el servidor remoto
+    #params={'origen': 'Airflow container', 'destino': 'servidor remoto 1'},  # Parámetros que deseas enviar al script
+    cmd_timeout=120,
+    do_xcom_push=True,  # Permite que la salida de la tarea se almacene en XCom para verla en la interfaz de Airflow
+    dag=dag,
 )
 
 tarea1 >> [ tarea2, tarea3 ]
